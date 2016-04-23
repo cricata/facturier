@@ -16,22 +16,16 @@
             <table class="table table-hover records_list">
                 <thead>
                     <tr>
-                        {% for column in columns %}
-                            <th>{{ column|trans|capitalize }}</th>
-                        {% endfor %}
+
                         <th>{% trans %}Actions{% endtrans %}</th>
                     </tr>
                 </thead>
                 <tbody>
-                {% for product in products %}
+                {% for product in entities %}
                     <tr>
-                        <td><a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.id }}</a></td>
-                        <td>{{ product.manufacturer }}</td>
-                        <td>{{ product.ean }}</td>
-                        <td>{{ product.reference }}</td>
-                        <td>{{ product.salePrice }}</td>
-                        <td>{% if product.datCre %}{{ product.datCre|date('Y-m-d H:i:s') }}{% endif %}</td>
-                        <td>{% if product.datUpd %}{{ product.datUpd|date('Y-m-d H:i:s') }}{% endif %}</td>
+
+                        <td>{{ dump(product) }}</td>
+
                         <td>
                             <a class="btn btn-sm btn-info" href="{{ path('product_show', { 'id': product.id }) }}">
                             <span class="glyphicon glyphicon-share"></span> Show</a>
