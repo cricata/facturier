@@ -299,7 +299,7 @@ class CsvFilesController extends Controller
                     
                     $unitMeasure = $em->getRepository('AppBundle:UnitMeasure')->find(1);
                     if($unitMeasure){
-                       $product->setIdUnitMeasure($unitMeasure);
+                       $product->setUnitMeasure($unitMeasure);
                     }                    
                     
                     if(array_key_exists(13, $line))
@@ -426,6 +426,54 @@ class CsvFilesController extends Controller
         $em->clear(); 
         
         return $wrong_csv_lines;
-    }       
+    } 
+    
+    /**
+     * Process entities from csv.
+     *
+     */
+    public function stocCsvAction(Request $request, $csv)
+    {
+        $em = $this->getDoctrine()->getManager();
+        
+        $my_file = $csv->getAbsolutePath();
+        
+        $my_switch = true;
+        $wrong_csv_lines = '';
+        $today = new \DateTime("now"); 
+        
+        if (($handle = fopen($my_file, "r")) !== FALSE) {
+            $nr_crt = 1;
+            while (($line = fgetcsv($handle,0,";")) !== FALSE) {   
+                
+                if(count($line)<=1) continue; //separator gresit => sarim linia
+                
+                // skip fisrt line
+                if($my_switch){
+                  $my_switch = false;
+                  continue;
+                }
+                
+                $line = array_map(function ($v){
+                    
+                    return mb_convert_case(trim($v), MB_CASE_LOWER, "UTF-8"); 
+                    
+                }, $line);
+                
+                
+                
+           
+            }
+            
+            fclose($handle);
+        } else {
+            return 'Fisierul csv nu poate fi deschis!';          
+        }
+        
+        $em->flush();
+        $em->clear(); 
+        
+        return $wrong_csv_lines;
+    }         
     
 }
